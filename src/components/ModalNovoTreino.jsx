@@ -2,35 +2,34 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 
 export function ModalNovoTreino({ aberto, aoFechar, aoSalvar }) {
-
   const [data, setData] = useState('');
   const [foco, setFoco] = useState('');
-  const [duracao, setDuracao] = useState('');
+  const [horas, setHoras] = useState('');
+  const [minutos, setMinutos] = useState('');
   const [finalizacoes, setFinalizacoes] = useState('');
 
-  
   if (!aberto) return null;
 
   function handleSubmit(e) {
-    
     e.preventDefault();
-    
+
     const dataFormatada = data.split('-').reverse().join('/');
-    
+    const duracaoEmMinutos = (Number(horas) * 60) + Number(minutos);
+
     const novoTreino = {
       id: Date.now(),
-      
       data: dataFormatada,
       foco,
-      duracao: Number(duracao),
+      duracao: duracaoEmMinutos,
       finalizacoes: Number(finalizacoes),
     };
-    
+
     aoSalvar(novoTreino);
-    
+
     setData('');
     setFoco('');
-    setDuracao('');
+    setHoras('');
+    setMinutos('');
     setFinalizacoes('');
     aoFechar();
   }
@@ -69,17 +68,28 @@ export function ModalNovoTreino({ aberto, aoFechar, aoSalvar }) {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Duração (horas)</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Horas</label>
               <input
                 type="number"
-                step="0.5"
-                min="0.5"
                 required
-                placeholder="Ex: 1.5"
-                value={duracao}
-                onChange={(e) => setDuracao(e.target.value)}
+                min="0"
+                value={horas}
+                onChange={(e) => setHoras(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Minutos</label>
+              <input
+                type="number"
+                required
+                min="0"
+                max="59"
+                value={minutos}
+                onChange={(e) => setMinutos(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -88,9 +98,8 @@ export function ModalNovoTreino({ aberto, aoFechar, aoSalvar }) {
               <label className="block text-sm font-medium text-slate-700 mb-1">Finalizações</label>
               <input
                 type="number"
-                min="0"
                 required
-                placeholder="Ex: 2"
+                min="0"
                 value={finalizacoes}
                 onChange={(e) => setFinalizacoes(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -98,21 +107,12 @@ export function ModalNovoTreino({ aberto, aoFechar, aoSalvar }) {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
-            <button
-              type="button"
-              onClick={aoFechar}
-              className="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-lg cursor-pointer"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg cursor-pointer"
-            >
-              Salvar treino
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-medium transition-colors cursor-pointer"
+          >
+            Registrar treino
+          </button>
         </form>
       </div>
     </div>

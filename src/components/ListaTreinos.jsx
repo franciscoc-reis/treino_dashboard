@@ -1,3 +1,5 @@
+import { formatarDuracao } from '../utils/formatarTempo';
+
 export function ListaTreinos({ treinos }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
@@ -24,7 +26,7 @@ export function ListaTreinos({ treinos }) {
                     {treino.foco}
                   </span>
                 </td>
-                <td className="py-4 px-6">{treino.duracao}h</td>
+                <td className="py-4 px-6">{formatarDuracao(treino.duracao)}</td>
                 <td className="py-4 px-6">{treino.finalizacoes}</td>
               </tr>
             ))}
